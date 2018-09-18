@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "项目文件智能生成器";
+}
+
+<style>
+    #inputPanel > div {
+        margin-bottom: 50px;
+    }
+
+        #inputPanel > div > input {
+            width:230px;
+        }
+</style>
+<div id="myCarousel" style="text-align:center;vertical-align:central; padding-top:20px;">
+    <form id="inputPanel" action="/Home/GenerateFileStructAndFile" method="post">
+        <div>
+            <input type="text" id="generatedPath" name="generatedPath" placeholder="生成在哪个目录下" required />
+         </div>
+        <div>
+            <input type="text" id="coreEnglishName" name="coreEnglishName" placeholder="请输入业务模块核心描述英文名称" required />
+        </div>
+        <input type="submit" style="background-color:antiquewhite;margin-top:10px;font-size:23px;" value="智能生成各文件目录及文件" />
+    </form>
+</div>
