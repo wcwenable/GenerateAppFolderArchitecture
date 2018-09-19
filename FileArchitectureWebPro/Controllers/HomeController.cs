@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FileArchitectureWebPro.Models;
 using System.IO;
+using FileArchitectureWebPro.Utilities;
 
 namespace FileArchitectureWebPro.Controllers
 {
@@ -22,9 +23,17 @@ namespace FileArchitectureWebPro.Controllers
             var msg =string.Empty;
             if (string.IsNullOrWhiteSpace(generatedPath) || string.IsNullOrWhiteSpace(coreEnglishName))
             {
+                #region 生成DAO相关文件目录结构
+                var commonDaoDir = @"\Platform\SCM\SCM.DataAccess";
+                var daoDir = string.Format(@"{0}{1}\Dao",generatedPath,commonDaoDir);
+                var iDaoDir = string.Format(@"{0}{1}\IDao", generatedPath, commonDaoDir);
+                var daoFactoryDir = string.Format(@"{0}{1}\Factory", generatedPath, commonDaoDir); 
+
+
+                #endregion
                 msg = "生成失败：参数非法！";
             }
-            if (checkDir(generatedPath))//已存在或成功创建了该文件夹目录
+            if (FolderAndFileHelper.checkDir(generatedPath))//已存在或成功创建了该文件夹目录
             {
 
                 msg = "操作成功。";
@@ -36,25 +45,6 @@ namespace FileArchitectureWebPro.Controllers
 
             ViewBag.Message = msg;
             return View();
-        }
-
-        /// <summary>
-        /// 检查指定目录是否存在,如不存在则创建
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        private static bool checkDir(string url)
-        {
-            try
-            {
-                if (!Directory.Exists(url))//如果不存在就创建file文件夹　　             　　              
-                    Directory.CreateDirectory(url);//创建该文件夹　　            
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
 
 
