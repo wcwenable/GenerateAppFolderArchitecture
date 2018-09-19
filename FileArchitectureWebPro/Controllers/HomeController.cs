@@ -26,6 +26,7 @@ namespace FileArchitectureWebPro.Controllers
             }
             if (checkDir(generatedPath))//已存在或成功创建了该文件夹目录
             {
+
                 msg = "操作成功。";
             }
             else
