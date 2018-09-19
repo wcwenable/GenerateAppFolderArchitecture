@@ -28,33 +28,47 @@ namespace FileArchitectureWebPro.Controllers
             }
             if (FolderAndFileHelper.checkDir(query.generatedDir))//已存在或成功创建了该文件夹目录
             {
+                query.projectCommonDir = string.IsNullOrWhiteSpace(query.projectCommonDir) ? @"\Platform\SCM" : query.projectCommonDir;
                 #region 生成DAO相关文件目录结构
-                ProcessBusinessLayerRelevantPart(query.generatedDir, @"\Platform\SCM\SCM.DataAccess", query.coreEnglishName,"Dao", "DALFactory_", "Dao",".cs", msg);
+                query.daoDir = string.IsNullOrWhiteSpace(query.daoDir) ? @"\SCM.DataAccess" : query.daoDir;
+                query.daoDir = GetSpecifiedDir(query.projectCommonDir,query.daoDir);
+                ProcessBusinessLayerRelevantPart(query.generatedDir, query.daoDir, query.coreEnglishName,"Dao", "DALFactory_", "Dao",".cs", msg);
                 #endregion
 
                 #region 生成BLL相关文件目录结构
-                ProcessBusinessLayerRelevantPart(query.generatedDir, @"\Platform\SCM\SCM.Service", query.coreEnglishName, "Business", "DALFactory_", "Business", ".cs", msg);
+                query.bllDir = string.IsNullOrWhiteSpace(query.bllDir) ? @"\SCM.Service" : query.bllDir;
+                query.bllDir = GetSpecifiedDir(query.projectCommonDir, query.bllDir);
+                ProcessBusinessLayerRelevantPart(query.generatedDir, query.bllDir, query.coreEnglishName, "Business", "DALFactory_", "Business", ".cs", msg);
                 #endregion
 
                 #region 生成Model层相关文件目录结构
-                var commonModelDir = @"\Platform\SCM\SCM.Model\Custom";
-                ProcessModelLayerRelevantPart(query.generatedDir, commonModelDir, query.coreEnglishName, "", "_Result", ".cs", msg);
-                ProcessModelLayerRelevantPart(query.generatedDir, commonModelDir, query.coreEnglishName, "", "_Q", ".cs", msg);
+                query.modelDir = string.IsNullOrWhiteSpace(query.modelDir) ? @"\SCM.Model\Custom" : query.modelDir;
+                query.modelDir = GetSpecifiedDir(query.projectCommonDir, query.modelDir);
+                ProcessModelLayerRelevantPart(query.generatedDir, query.modelDir, query.coreEnglishName, "", "_Result", ".cs", msg);
+                ProcessModelLayerRelevantPart(query.generatedDir, query.modelDir, query.coreEnglishName, "", "_Q", ".cs", msg);
                 #endregion
 
                 #region 生成前端MVC相关文件目录结构
                 //生成控制器类文件
-                ProcessModelLayerRelevantPart(query.generatedDir, @"\Platform\SCM\SCM.Web\Controllers", query.coreEnglishName, "", "Controller", ".cs", msg);
+                query.controllerDir = string.IsNullOrWhiteSpace(query.controllerDir) ? @"\SCM.Web\Controllers" : query.controllerDir;
+                query.controllerDir = GetSpecifiedDir(query.projectCommonDir, query.controllerDir);
+                ProcessModelLayerRelevantPart(query.generatedDir, query.controllerDir, query.coreEnglishName, "", "Controller", ".cs", msg);
 
                 //生成视图类文件 
-                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Views\{0}", query.coreEnglishName), "Index", "", "", ".cshtml", msg);
+                query.viewDir = string.IsNullOrWhiteSpace(query.viewDir) ? @"\SCM.Web\Views" : query.viewDir;
+                query.viewDir = GetSpecifiedDir(query.projectCommonDir, query.viewDir);
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"{1}\{0}", query.coreEnglishName,query.viewDir), "Index", "", "", ".cshtml", msg);
 
                 //生成html静态文件
-                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Htmls\{0}", query.coreEnglishName), query.coreEnglishName, "addEdit", "", ".html", msg);
+                query.htmlDir = string.IsNullOrWhiteSpace(query.htmlDir) ? @"\SCM.Web\Htmls" : query.htmlDir;
+                query.htmlDir = GetSpecifiedDir(query.projectCommonDir, query.htmlDir);
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"{1}\{0}", query.coreEnglishName,query.htmlDir), query.coreEnglishName, "addEdit", "", ".html", msg);
 
                 //生成js静态文件
-                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Scripts\{0}", query.coreEnglishName), query.coreEnglishName, "AddEdit_", "", ".js", msg);
-                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Scripts\{0}", query.coreEnglishName), query.coreEnglishName, "Index_", "", ".js", msg);
+                query.jsDir = string.IsNullOrWhiteSpace(query.jsDir) ? @"\SCM.Web\Scripts" : query.jsDir;
+                query.jsDir = GetSpecifiedDir(query.projectCommonDir, query.jsDir);
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"{1}\{0}", query.coreEnglishName,query.jsDir), query.coreEnglishName, "AddEdit_", "", ".js", msg);
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"{1}\{0}", query.coreEnglishName, query.jsDir), query.coreEnglishName, "Index_", "", ".js", msg);
 
                 #endregion
 
@@ -67,6 +81,11 @@ namespace FileArchitectureWebPro.Controllers
 
             ViewBag.Message = msg.ToString();
             return View();
+        }
+
+        private static string GetSpecifiedDir(string projectCommonDir, string specifiedDir)
+        {
+            return string.Format(@"{0}{1}", projectCommonDir, specifiedDir).Replace(@"\\", @"\");
         }
 
         private static void ProcessBusinessLayerRelevantPart(string generatedPath, string layerPath, string coreEnglishName,string dirSuffix,string filePrefix, string fileSuffix,string extension, StringBuilder msg)
