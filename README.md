@@ -1,0 +1,2 @@
+# GenerateAppFolderArchitecture
+用于智能生成应用文件夹及文件层级结构，释放开发者手动创建文件夹目录及文件的琐碎时间
