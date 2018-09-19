@@ -33,10 +33,6 @@ namespace FileArchitectureWebPro.Utilities
         public static string GetTempFileName(string prefix, string extension, string directory)
         {
             var fileName = prefix + Guid.NewGuid().ToString();
-            if (string.IsNullOrEmpty(directory))
-            {
-                directory = Path.GetTempPath();
-            }
             return GenerateFile(directory, extension, fileName);
         }
 

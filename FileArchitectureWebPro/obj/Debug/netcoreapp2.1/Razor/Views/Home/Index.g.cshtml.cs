@@ -63,7 +63,7 @@ using FileArchitectureWebPro.Models;
             WriteLiteral("\r\n<style>\r\n    #inputPanel > div {\r\n        margin-bottom: 50px;\r\n    }\r\n\r\n        #inputPanel > div > input {\r\n            width:230px;\r\n        }\r\n</style>\r\n<div id=\"myCarousel\" style=\"text-align:center;vertical-align:central; padding-top:20px;\">\r\n    ");
             EndContext();
             BeginContext(299, 502, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4ce2d764b56346b492eb3d12c8eb8836", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5cf2535184cd43649bfa4ef22efc7e7d", async() => {
                 BeginContext(376, 418, true);
                 WriteLiteral(@"
         <div>
