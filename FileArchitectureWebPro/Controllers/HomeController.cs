@@ -19,27 +19,43 @@ namespace FileArchitectureWebPro.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerateFileStructAndFile(string generatedPath, string coreEnglishName)
+        public IActionResult GenerateFileStructAndFile(Generate_Q query)
         {
             var msg = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(generatedPath) || string.IsNullOrWhiteSpace(coreEnglishName))
+            if (string.IsNullOrWhiteSpace(query.generatedDir) || string.IsNullOrWhiteSpace(query.coreEnglishName))
             {
                 msg.AppendLine("生成失败：参数非法！");
             }
-            if (FolderAndFileHelper.checkDir(generatedPath))//已存在或成功创建了该文件夹目录
+            if (FolderAndFileHelper.checkDir(query.generatedDir))//已存在或成功创建了该文件夹目录
             {
                 #region 生成DAO相关文件目录结构
-                ProcessBusinessLayerRelevantPart(generatedPath, @"\Platform\SCM\SCM.DataAccess", coreEnglishName,"Dao", "DALFactory_", "Dao", msg);
+                ProcessBusinessLayerRelevantPart(query.generatedDir, @"\Platform\SCM\SCM.DataAccess", query.coreEnglishName,"Dao", "DALFactory_", "Dao",".cs", msg);
                 #endregion
 
                 #region 生成BLL相关文件目录结构
-                ProcessBusinessLayerRelevantPart(generatedPath, @"\Platform\SCM\SCM.Service", coreEnglishName, "Business", "DALFactory_", "Business", msg);
+                ProcessBusinessLayerRelevantPart(query.generatedDir, @"\Platform\SCM\SCM.Service", query.coreEnglishName, "Business", "DALFactory_", "Business", ".cs", msg);
                 #endregion
 
                 #region 生成Model层相关文件目录结构
                 var commonModelDir = @"\Platform\SCM\SCM.Model\Custom";
-                ProcessModelLayerRelevantPart(generatedPath, commonModelDir, coreEnglishName, "", "_Result", msg);
-                ProcessModelLayerRelevantPart(generatedPath, commonModelDir, coreEnglishName, "", "_Q", msg);
+                ProcessModelLayerRelevantPart(query.generatedDir, commonModelDir, query.coreEnglishName, "", "_Result", ".cs", msg);
+                ProcessModelLayerRelevantPart(query.generatedDir, commonModelDir, query.coreEnglishName, "", "_Q", ".cs", msg);
+                #endregion
+
+                #region 生成前端MVC相关文件目录结构
+                //生成控制器类文件
+                ProcessModelLayerRelevantPart(query.generatedDir, @"\Platform\SCM\SCM.Web\Controllers", query.coreEnglishName, "", "Controller", ".cs", msg);
+
+                //生成视图类文件 
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Views\{0}", query.coreEnglishName), "Index", "", "", ".cshtml", msg);
+
+                //生成html静态文件
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Htmls\{0}", query.coreEnglishName), query.coreEnglishName, "addEdit", "", ".html", msg);
+
+                //生成js静态文件
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Scripts\{0}", query.coreEnglishName), query.coreEnglishName, "AddEdit_", "", ".js", msg);
+                ProcessModelLayerRelevantPart(query.generatedDir, string.Format(@"\Platform\SCM\SCM.Web\Scripts\{0}", query.coreEnglishName), query.coreEnglishName, "Index_", "", ".js", msg);
+
                 #endregion
 
                 msg.AppendLine("操作成功。");
@@ -53,7 +69,7 @@ namespace FileArchitectureWebPro.Controllers
             return View();
         }
 
-        private static void ProcessBusinessLayerRelevantPart(string generatedPath, string layerPath, string coreEnglishName,string dirSuffix,string filePrefix, string fileSuffix, StringBuilder msg)
+        private static void ProcessBusinessLayerRelevantPart(string generatedPath, string layerPath, string coreEnglishName,string dirSuffix,string filePrefix, string fileSuffix,string extension, StringBuilder msg)
         {
             var commonDaoDir = layerPath;
             var businessLayerDir = string.Format(@"{0}{1}\{2}", generatedPath, commonDaoDir, dirSuffix);
@@ -61,51 +77,24 @@ namespace FileArchitectureWebPro.Controllers
             var businessLayerFactoryDir = string.Format(@"{0}{1}\Factory", generatedPath, commonDaoDir);
 
             var strBusinessLayerFile = string.Format("{0}{1}", coreEnglishName, fileSuffix);
-            var strBusinessLayerFileName = FolderAndFileHelper.GenerateFile(businessLayerDir, ".cs", strBusinessLayerFile);
+            var strBusinessLayerFileName = FolderAndFileHelper.GenerateFile(businessLayerDir, extension, strBusinessLayerFile);
             msg.AppendFormat("已创建文件{0}", strBusinessLayerFileName).AppendLine();
 
             var strIBusinessLayerFile = string.Format("I{0}{1}", coreEnglishName, fileSuffix);
-            var strIBusinessLayerFileName = FolderAndFileHelper.GenerateFile(iBusinessLayerDir, ".cs", strIBusinessLayerFile);
+            var strIBusinessLayerFileName = FolderAndFileHelper.GenerateFile(iBusinessLayerDir, extension, strIBusinessLayerFile);
             msg.AppendFormat("已创建文件{0}", strIBusinessLayerFileName).AppendLine();
 
             var strFactoryFile = string.Format("{2}{0}_{1}", coreEnglishName, fileSuffix,filePrefix);
-            var strFactoryFileName = FolderAndFileHelper.GenerateFile(businessLayerFactoryDir, ".cs", strFactoryFile);
+            var strFactoryFileName = FolderAndFileHelper.GenerateFile(businessLayerFactoryDir, extension, strFactoryFile);
             msg.AppendFormat("已创建文件{0}", strFactoryFileName).AppendLine();
         }
 
-        private static void ProcessModelLayerRelevantPart(string generatedPath, string modelPath, string coreEnglishName, string prefix, string suffix, StringBuilder msg)
+        private static void ProcessModelLayerRelevantPart(string generatedPath, string modelPath, string coreEnglishName, string prefix, string suffix,string extension, StringBuilder msg)
         {
             var strModelRetName = string.Format("{0}{1}{2}", prefix,coreEnglishName,suffix);
             var strModelRetDir = string.Format("{0}{1}", generatedPath, modelPath);
-            var strModelRetFileName = FolderAndFileHelper.GenerateFile(strModelRetDir, ".cs", strModelRetName);
+            var strModelRetFileName = FolderAndFileHelper.GenerateFile(strModelRetDir, extension, strModelRetName);
             msg.AppendFormat("已创建文件{0}", strModelRetFileName).AppendLine();
         }
-
-
-
-        //public IActionResult About()
-        //{
-        //    ViewData["Message"] = "Your application description page.";
-
-        //    return View();
-        //}
-
-        //public IActionResult Contact()
-        //{
-        //    ViewData["Message"] = "Your contact page.";
-
-        //    return View();
-        //}
-
-        //public IActionResult Privacy()
-        //{
-        //    return View();
-        //}
-
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
     }
 }

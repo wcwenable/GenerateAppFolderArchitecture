@@ -63,7 +63,7 @@ using FileArchitectureWebPro.Models;
             WriteLiteral("\r\n<!DOCTYPE html>\r\n\r\n<html>\r\n");
             EndContext();
             BeginContext(58, 120, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c5112f3b9e08413e88751330d5897564", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1c5426d125b14e178d5be49a900e5eea", async() => {
                 BeginContext(64, 107, true);
                 WriteLiteral("\r\n    <meta name=\"viewport\" content=\"width=device-width\" />\r\n    <title>GenerateFileStructAndFile</title>\r\n");
                 EndContext();
@@ -83,7 +83,7 @@ using FileArchitectureWebPro.Models;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(180, 68, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3c52675a09754f9ea1886172b71b4999", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "aeec8fa91c8c46bc8118042075e59cd5", async() => {
                 BeginContext(186, 21, true);
                 WriteLiteral("\r\n    <pre>\r\n        ");
                 EndContext();

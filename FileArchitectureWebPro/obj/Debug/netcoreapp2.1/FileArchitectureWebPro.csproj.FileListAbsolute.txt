@@ -31,3 +31,4 @@ D:\Users\点觉CTM\source\repos\FileArchitectureWebPro\FileArchitectureWebPro\ob
 D:\Users\点觉CTM\source\repos\FileArchitectureWebPro\FileArchitectureWebPro\obj\Debug\netcoreapp2.1\FileArchitectureWebPro.pdb
 D:\Users\点觉CTM\source\repos\FileArchitectureWebPro\FileArchitectureWebPro\obj\Debug\netcoreapp2.1\FileArchitectureWebPro.csproj.CopyComplete
 D:\Users\点觉CTM\source\repos\FileArchitectureWebPro\FileArchitectureWebPro\obj\Debug\netcoreapp2.1\Razor\Views\Home\GenerateFileStructAndFile.g.cshtml.cs
+D:\Users\点觉CTM\Source\repos\FileArchitectureWebPro\FileArchitectureWebPro\obj\Debug\netcoreapp2.1\Razor\201809191432\Platform\SCM\SCM.Web\Views\Payment\Index.g.cshtml.cs
